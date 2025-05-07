@@ -1,10 +1,10 @@
 import AddStoryPresenter from "./add-story-presenter";
-import NotificationManager from "../../utils/notification-manager"; // Import NotificationManager
+import NotificationManager from "../../utils/notification-manager";
 import { createLoadingTemplate } from "../../utils";
 
 class AddStoryPage {
   #presenter = null;
-  #notificationManager = null; // Add notification manager property
+  #notificationManager = null;
 
   async render() {
     return `
@@ -21,9 +21,7 @@ class AddStoryPage {
           </a>
         </div>
         
-        <!-- Add notification container -->
         <div id="notification-container" class="notification-container">
-          <!-- Notification UI will be rendered here -->
         </div>
         
         <div class="add-story-container">
@@ -115,7 +113,6 @@ class AddStoryPage {
       view: this,
     });
 
-    // Initialize notification manager
     this.#notificationManager = new NotificationManager({
       container: document.getElementById("notification-container"),
     });

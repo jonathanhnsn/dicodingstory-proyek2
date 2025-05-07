@@ -7,11 +7,7 @@
     
     <link rel="shortcut icon" href="favicon.png">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
-    
-    <!-- Add Web App Manifest -->
     <link rel="manifest" href="/manifest.json">
-    
-    <!-- Add theme-color for PWA -->
     <meta name="theme-color" content="#007bff">
     
     <title>Dicoding Story</title>
@@ -38,7 +34,6 @@
 
     <main id="main-content" class="main-content"></main>
     
-    <!-- Add offline page -->
     <div id="offline-content" style="display: none;">
       <div class="container">
         <div class="error-container">
@@ -51,9 +46,7 @@
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
     
-    <!-- Register service worker -->
     <script>
-      // Check if service worker is supported
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
           navigator.serviceWorker.register('/service-worker.js')
@@ -65,7 +58,6 @@
             });
         });
         
-        // Handle offline/online status
         window.addEventListener('online', () => {
           document.getElementById('offline-content').style.display = 'none';
           document.getElementById('main-content').style.display = 'block';

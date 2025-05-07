@@ -1,5 +1,5 @@
 import HomePresenter from "./home-presenter";
-import NotificationManager from "../../utils/notification-manager"; // Import NotificationManager
+import NotificationManager from "../../utils/notification-manager";
 import {
   createStoryItemTemplate,
   createLoadingTemplate,
@@ -8,7 +8,7 @@ import {
 
 class HomePage {
   #presenter = null;
-  #notificationManager = null; // Add notification manager property
+  #notificationManager = null;
 
   async render() {
     return `
@@ -20,12 +20,9 @@ class HomePage {
         <h1 class="page-title">Dicoding Story</h1>
         
         <div id="auth-buttons-container">
-          <!-- Auth buttons will be rendered here -->
         </div>
         
-        <!-- Add notification container -->
         <div id="notification-container" class="notification-container">
-          <!-- Notification UI will be rendered here -->
         </div>
         
         <div id="stories" class="stories">

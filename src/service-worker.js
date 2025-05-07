@@ -1,5 +1,5 @@
 const CACHE_NAME = "dicoding-story-cache-v1";
-const urlsToCache = ["/", "/index.html", "/favicon.png"];
+const urlsToCache = ["/", "/index.html", "/favicon.png", "/offline.html"];
 
 self.addEventListener("install", (event) => {
   console.log("Service Worker: Installing");
@@ -40,9 +40,7 @@ self.addEventListener("fetch", (event) => {
     caches
       .match(event.request)
       .then((response) => {
-        if (response) {
-          return response;
-        }
+        if (response) return response;
 
         return fetch(event.request).then((response) => {
           if (
@@ -54,7 +52,6 @@ self.addEventListener("fetch", (event) => {
           }
 
           const responseToCache = response.clone();
-
           caches.open(CACHE_NAME).then((cache) => {
             cache.put(event.request, responseToCache);
           });
@@ -63,12 +60,29 @@ self.addEventListener("fetch", (event) => {
         });
       })
       .catch(() => {
-        if (event.request.url.indexOf(".html") > -1) {
+        if (event.request.headers.get("accept")?.includes("text/html")) {
           return caches.match("/offline.html");
         }
+
+        if (event.request.headers.get("accept")?.includes("application/json")) {
+          return new Response(
+            JSON.stringify({
+              message: "Offline – tidak dapat mengambil data dari server.",
+            }),
+            {
+              headers: { "Content-Type": "application/json" },
+            }
+          );
+        }
+
+        return new Response("", {
+          status: 503,
+          statusText: "Offline",
+        });
       })
   );
 });
+
 
 self.addEventListener("push", (event) => {
   console.log("Service Worker: Push received");

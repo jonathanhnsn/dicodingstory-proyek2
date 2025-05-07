@@ -62,7 +62,15 @@ class HomePresenter {
         throw new Error(response.message);
       }
 
-      const { listStory } = response;
+      const listStory = response.listStory || [];
+
+      if (listStory.length === 0) {
+        throw new Error(
+          response.message || "Tidak ada cerita yang bisa ditampilkan."
+        );
+      }
+
+
       this._state.hasMore = listStory.length === 10;
 
       if (isLoadMore) {

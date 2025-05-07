@@ -67,7 +67,6 @@ const NotificationHelper = {
         return { error: true, message: "Notification permission not granted" };
       }
 
-      // Check if already subscribed
       const existingSubscription =
         await swRegistration.pushManager.getSubscription();
       if (existingSubscription) {
@@ -79,10 +78,8 @@ const NotificationHelper = {
         };
       }
 
-      // Convert VAPID key to Uint8Array
       const applicationServerKey = this._urlB64ToUint8Array(VAPID_PUBLIC_KEY);
 
-      // Subscribe to push service
       const subscription = await swRegistration.pushManager.subscribe({
         userVisibleOnly: true,
         applicationServerKey,
@@ -90,7 +87,6 @@ const NotificationHelper = {
 
       console.log("Subscribed to push service:", subscription);
 
-      // Send subscription to server
       const response = await this._sendSubscriptionToServer(
         subscription,
         token
@@ -122,16 +118,13 @@ const NotificationHelper = {
         };
       }
 
-      // Get the endpoint before unsubscribing
       const endpoint = subscription.endpoint;
 
-      // Unsubscribe locally
       const result = await subscription.unsubscribe();
       if (!result) {
         return { error: true, message: "Failed to unsubscribe locally" };
       }
 
-      // Send unsubscribe request to server
       const response = await this._sendUnsubscribeToServer(endpoint, token);
       return response;
     } catch (error) {
@@ -203,7 +196,6 @@ const NotificationHelper = {
     }
   },
 
-  // Function to convert base64 to Uint8Array for the VAPID key
   _urlB64ToUint8Array(base64String) {
     const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
     const base64 = (base64String + padding)
@@ -219,7 +211,6 @@ const NotificationHelper = {
     return outputArray;
   },
 
-  // Show a sample notification (for testing purposes)
   async showSampleNotification() {
     if (!("Notification" in window)) {
       console.log("This browser does not support notifications");

@@ -1,6 +1,6 @@
 import "../styles/styles.css";
 import "../styles/view-transition.css";
-import "../styles/notification.css"; // Import notification CSS
+import "../styles/notification.css";
 
 import App from "./pages/app";
 

@@ -5,10 +5,14 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 module.exports = {
   entry: {
     app: path.resolve(__dirname, "src/scripts/index.js"),
-    sw: path.resolve(__dirname, "src/public/service-worker.js"),
+    sw: path.resolve(__dirname, "src/service-worker.js"),
   },
   output: {
-    filename: "[name].bundle.js",
+    filename: (pathData) => {
+      return pathData.chunk.name === "sw"
+        ? "service-worker.js"
+        : "[name].bundle.js";
+    },
     path: path.resolve(__dirname, "dist"),
   },
   module: {

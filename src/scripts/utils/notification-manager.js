@@ -15,13 +15,11 @@ class NotificationManager {
       return;
     }
 
-    // Check if service worker is supported
     if (!("serviceWorker" in navigator)) {
       this._renderUnsupported();
       return;
     }
 
-    // Check notification permission status
     const permissionStatus = Notification.permission;
     const isSubscribed = await NotificationHelper.isSubscribed();
 
@@ -133,7 +131,6 @@ class NotificationManager {
 
     this.#container.innerHTML = content;
 
-    // Initialize icons if feather is available
     if (window.feather) {
       window.feather.replace();
     }
@@ -166,7 +163,6 @@ class NotificationManager {
 
     this.#container.appendChild(messageContainer);
 
-    // Initialize icons if feather is available
     if (window.feather) {
       window.feather.replace();
     }
@@ -176,7 +172,6 @@ class NotificationManager {
       messageContainer.remove();
     });
 
-    // Auto hide after 5 seconds
     setTimeout(() => {
       if (messageContainer.parentNode) {
         messageContainer.remove();
