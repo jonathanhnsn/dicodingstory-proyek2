@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Dicoding Story">
+    
+    <link rel="shortcut icon" href="favicon.png">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    
+    <!-- Add Web App Manifest -->
+    <link rel="manifest" href="/manifest.json">
+    
+    <!-- Add theme-color for PWA -->
+    <meta name="theme-color" content="#007bff">
+    
+    <title>Dicoding Story</title>
+  </head>
+  <body>
+    <a href="#main-content" class="skip-link">Langsung ke konten</a>
+    
+    <header>
+      <div class="main-header container">
+        <a class="brand-name" href="#/">Dicoding Story</a>
+
+        <nav id="navigation-drawer" class="navigation-drawer" aria-label="Navigation">
+          <ul id="nav-list" class="nav-list">
+            <li><a href="#/">Beranda</a></li>
+            <li id="auth-nav-item"></li>
+          </ul>
+        </nav>
+
+        <button id="drawer-button" class="drawer-button" aria-label="Menu">
+          <i data-feather="menu"></i>
+        </button>
+      </div>
+    </header>
+
+    <main id="main-content" class="main-content"></main>
+    
+    <!-- Add offline page -->
+    <div id="offline-content" style="display: none;">
+      <div class="container">
+        <div class="error-container">
+          <h2>Anda Sedang Offline</h2>
+          <p>Tidak dapat terhubung ke internet. Periksa koneksi anda dan coba lagi.</p>
+        </div>
+      </div>
+    </div>
+    
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    
+    <!-- Register service worker -->
+    <script>
+      // Check if service worker is supported
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/service-worker.js')
+            .then((registration) => {
+              console.log('Service Worker registered with scope:', registration.scope);
+            })
+            .catch((error) => {
+              console.error('Service Worker registration failed:', error);
+            });
+        });
+        
+        // Handle offline/online status
+        window.addEventListener('online', () => {
+          document.getElementById('offline-content').style.display = 'none';
+          document.getElementById('main-content').style.display = 'block';
+        });
+        
+        window.addEventListener('offline', () => {
+          document.getElementById('offline-content').style.display = 'block';
+        });
+      }
+    </script>
+  </body>
+</html>

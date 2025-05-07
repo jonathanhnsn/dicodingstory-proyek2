@@ -1,0 +1,139 @@
+::view-transition-old(root) {
+  animation: 300ms cubic-bezier(0.4, 0, 0.2, 1) both fade-out;
+}
+
+::view-transition-new(root) {
+  animation: 300ms cubic-bezier(0.4, 0, 0.2, 1) both fade-in;
+}
+
+::view-transition-old(home-page) {
+  animation: 300ms cubic-bezier(0.4, 0, 0.2, 1) both slide-out-to-left;
+}
+
+::view-transition-new(home-page) {
+  animation: 300ms cubic-bezier(0.4, 0, 0.2, 1) both slide-in-from-right;
+}
+
+::view-transition-old(detail-page) {
+  animation: 300ms cubic-bezier(0.4, 0, 0.2, 1) both scale-down;
+}
+
+::view-transition-new(detail-page) {
+  animation: 300ms cubic-bezier(0.4, 0, 0.2, 1) both scale-up;
+}
+
+::view-transition-old(add-page) {
+  animation: 300ms cubic-bezier(0.4, 0, 0.2, 1) both slide-out-to-bottom;
+}
+
+::view-transition-new(add-page) {
+  animation: 300ms cubic-bezier(0.4, 0, 0.2, 1) both slide-in-from-top;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fade-out {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes slide-in-from-right {
+  from {
+    transform: translateX(100%);
+  }
+
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes slide-out-to-left {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes slide-in-from-top {
+  from {
+    transform: translateY(-30px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slide-out-to-bottom {
+  from {
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+  to {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+}
+
+@keyframes scale-up {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes scale-down {
+  from {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  to {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+}
+
+.page-container {
+  view-transition-name: root;
+}
+
+.home-page {
+  view-transition-name: home-page;
+}
+
+.detail-page {
+  view-transition-name: detail-page;
+}
+
+.add-page {
+  view-transition-name: add-page;
+}
+
+.auth-page {
+  view-transition-name: auth-page;
+}
