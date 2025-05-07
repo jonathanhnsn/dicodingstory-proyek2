@@ -1,5 +1,6 @@
 import ApiService from "../../../scripts/data/api";
 import Auth from "../../utils/auth";
+import { getAllStories } from "../../db-operations";
 
 class HomePresenter {
   #view = null;
@@ -70,7 +71,6 @@ class HomePresenter {
         );
       }
 
-
       this._state.hasMore = listStory.length === 10;
 
       if (isLoadMore) {
@@ -83,10 +83,25 @@ class HomePresenter {
       this.#view.setLoadMoreVisibility(this._state.hasMore);
     } catch (error) {
       this._state.error = error.message;
-      this.#view.showError(error.message);
+      console.error("Fetch API gagal:", error.message);
+
+      await this.#showCachedStories();
     } finally {
       this._state.loading = false;
     }
+  }
+
+  async #showCachedStories() {
+    const cachedStories = await getAllStories();
+
+    if (!cachedStories.length) {
+      this.#view.showError("Tidak ada data offline yang tersedia.");
+      return;
+    }
+
+    this._state.stories = cachedStories;
+    this.#view.showStories(cachedStories);
+    this.#view.setLoadMoreVisibility(false);
   }
 
   isAuthenticated() {

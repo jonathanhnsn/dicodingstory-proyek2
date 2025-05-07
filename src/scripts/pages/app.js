@@ -1,6 +1,8 @@
 import routes from "../routes/routes";
 import { getActiveRoute } from "../routes/url-parser";
 import Auth from "../utils/auth";
+import { addStory, getAllStories } from "../db-operations";
+
 
 class App {
   #content = null;
@@ -61,6 +63,26 @@ class App {
     }
   }
 
+  async _cacheStories() {
+    try {
+      const response = await fetch(
+        "https://api-staging.dicoding.dev/v1/stories"
+      );
+      const { listStory } = await response.json();
+
+      listStory.forEach((story) => {
+        addStory(story);
+      });
+
+      console.log("Story berhasil di-cache ke IndexedDB");
+    } catch (error) {
+      console.log("Gagal fetch API, coba load dari IndexedDB...");
+
+      const cachedStories = await getAllStories();
+      console.log("Stories dari IndexedDB:", cachedStories);
+    }
+  }
+
   async renderPage() {
     const url = getActiveRoute();
     const page = routes[url];
@@ -84,12 +106,22 @@ class App {
     if (document.startViewTransition) {
       const transition = document.startViewTransition(async () => {
         this.#content.innerHTML = await page.render();
+
+        if (url === "/") {
+          await this._cacheStories();
+        }
+
         await page.afterRender();
         this.initIcons();
       });
       await transition.finished;
     } else {
       this.#content.innerHTML = await page.render();
+
+      if (url === "/") {
+        await this._cacheStories();
+      }
+
       await page.afterRender();
       this.initIcons();
     }
