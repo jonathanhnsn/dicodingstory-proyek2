@@ -1,5 +1,6 @@
 import ApiService from "../../../scripts/data/api";
 import Auth from "../../utils/auth";
+import BookmarkDB from "../../data/indexeddb-utils";
 
 class StoryDetailPresenter {
   #view = null;
@@ -17,6 +18,7 @@ class StoryDetailPresenter {
       story: null,
       loading: false,
       error: null,
+      isBookmarked: false,
     };
 
     this._state = { ...this._initialState };
@@ -55,7 +57,13 @@ class StoryDetailPresenter {
       }
 
       this._state.story = response.story;
+
+      // Check if story is bookmarked
+      const bookmarked = await BookmarkDB.get(this._state.story.id);
+      this._state.isBookmarked = !!bookmarked;
+
       this.#view.showStoryDetail(this._state.story);
+      this.#view.updateBookmarkButton(this._state.isBookmarked);
 
       if (this._state.story.lat && this._state.story.lon) {
         this.#view.initMap(this._state.story);
@@ -65,6 +73,30 @@ class StoryDetailPresenter {
       this.#view.showError(error.message);
     } finally {
       this._state.loading = false;
+    }
+  }
+
+  async toggleBookmark() {
+    const story = this._state.story;
+
+    if (!story) return;
+
+    try {
+      const existing = await BookmarkDB.get(story.id);
+
+      if (existing) {
+        await BookmarkDB.delete(story.id);
+        this._state.isBookmarked = false;
+      } else {
+        await BookmarkDB.put(story);
+        this._state.isBookmarked = true;
+      }
+
+      this.#view.updateBookmarkButton(this._state.isBookmarked);
+      this.#view.showBookmarkNotification(this._state.isBookmarked);
+    } catch (error) {
+      console.error("Error toggling bookmark:", error);
+      this.#view.showError("Gagal menyimpan cerita");
     }
   }
 

@@ -68,6 +68,7 @@ export function createStoryDetailTemplate(story) {
         <p class="story-detail__description">${story.description}</p>
       </div>
       <div id="map" class="story-detail__map"></div>
+      <button id="bookmarkButton" class="btn btn-primary">Simpan Cerita</button>
     </article>
   `;
 }

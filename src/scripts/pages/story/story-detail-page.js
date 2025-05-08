@@ -26,6 +26,8 @@ class StoryDetailPage {
         <div id="story" class="story-container">
           ${createLoadingTemplate()}
         </div>
+        
+        <div id="notification" class="notification"></div>
       </section>
     `;
   }
@@ -61,6 +63,30 @@ class StoryDetailPage {
     storyContainer.innerHTML = createErrorTemplate(message);
   }
 
+  showBookmarkNotification(isBookmarked) {
+    const notification = document.getElementById("notification");
+    notification.textContent = isBookmarked
+      ? "Cerita berhasil disimpan"
+      : "Cerita dihapus dari daftar simpanan";
+    notification.classList.add("show");
+
+    // Hide notification after 3 seconds
+    setTimeout(() => {
+      notification.classList.remove("show");
+    }, 3000);
+  }
+
+  updateBookmarkButton(isBookmarked) {
+    const bookmarkButton = document.getElementById("bookmarkButton");
+    if (bookmarkButton) {
+      bookmarkButton.textContent = isBookmarked
+        ? "Batal Simpan"
+        : "Simpan Cerita";
+
+      bookmarkButton.classList.toggle("bookmarked", isBookmarked);
+    }
+  }
+
   showStoryDetail(story) {
     const storyContainer = document.getElementById("story");
 
@@ -70,16 +96,27 @@ class StoryDetailPage {
       });
 
       transition.finished.then(() => {
+        this._setupBookmarkButton();
         if (story.lat && story.lon) {
           this.initMap(story);
         }
       });
     } else {
       storyContainer.innerHTML = createStoryDetailTemplate(story);
+      this._setupBookmarkButton();
 
       if (story.lat && story.lon) {
         this.initMap(story);
       }
+    }
+  }
+
+  _setupBookmarkButton() {
+    const bookmarkButton = document.getElementById("bookmarkButton");
+    if (bookmarkButton) {
+      bookmarkButton.addEventListener("click", () => {
+        this.#presenter.toggleBookmark();
+      });
     }
   }
 
