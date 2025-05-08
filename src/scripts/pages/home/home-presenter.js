@@ -1,6 +1,5 @@
 import ApiService from "../../../scripts/data/api";
 import Auth from "../../utils/auth";
-import { getAllStories } from "../../db-operations";
 
 class HomePresenter {
   #view = null;
