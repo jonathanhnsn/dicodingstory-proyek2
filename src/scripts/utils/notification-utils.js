@@ -4,8 +4,7 @@ const ENDPOINTS = {
   SUBSCRIBE: `${CONFIG.BASE_URL}/notifications/subscribe`,
 };
 
-const VAPID_PUBLIC_KEY =
-  "BCCs2eonMI-6H2ctvFaWg-UYdDv387Vno_bzUzALpB442r2lCnsHmtrx8biyPi_E-1fSGABK_Qs_GlvPoJJqxbk";
+const VAPID_PUBLIC_KEY = "BCCs2eonMI-6H2ctvFaWg-UYdDv387Vno_bzUzALpB442r2lCnsHmtrx8biyPi_E-1fSGABK_Qs_GlvPoJJqxbk";
 
 const NotificationHelper = {
   async checkNotificationPermission() {
@@ -40,7 +39,7 @@ const NotificationHelper = {
 
     try {
       const registration = await navigator.serviceWorker.register(
-        "/service-worker.js"
+        "./service-worker.js"
       );
       console.log("Service Worker registered with scope:", registration.scope);
       return registration;
@@ -225,8 +224,8 @@ const NotificationHelper = {
     const title = "Dicoding Story";
     const options = {
       body: "Ini adalah contoh notifikasi dari Dicoding Story",
-      icon: "/icons/icon-192x192.png",
-      badge: "/icons/badge-72x72.png",
+      icon: "./images/logo.png",
+      badge: "./images/logo.png",
       vibrate: [100, 50, 100],
       data: {
         dateOfArrival: Date.now(),

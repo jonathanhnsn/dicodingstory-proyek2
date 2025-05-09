@@ -1,18 +1,13 @@
-const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
+const path = require("path");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
 
 module.exports = {
   entry: {
     app: path.resolve(__dirname, "src/scripts/index.js"),
-    sw: path.resolve(__dirname, "src/service-worker.js"),
   },
   output: {
-    filename: (pathData) => {
-      return pathData.chunk.name === "sw"
-        ? "service-worker.js"
-        : "[name].bundle.js";
-    },
+    filename: "[name].bundle.js",
     path: path.resolve(__dirname, "dist"),
   },
   module: {
@@ -26,12 +21,21 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, "src/index.html"),
+      filename: "index.html",
     }),
     new CopyWebpackPlugin({
       patterns: [
         {
           from: path.resolve(__dirname, "src/public/"),
           to: path.resolve(__dirname, "dist/"),
+        },
+        {
+          from: path.resolve(__dirname, "src/service-worker.js"),
+          to: path.resolve(__dirname, "dist/service-worker.js"),
+        },
+        {
+          from: path.resolve(__dirname, "src/public/offline.html"),
+          to: path.resolve(__dirname, "dist/offline.html"),
         },
       ],
     }),
