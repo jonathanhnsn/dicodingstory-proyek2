@@ -43,7 +43,6 @@ class HomePage {
       view: this,
     });
 
-    // Initialize notification manager
     this.#notificationManager = new NotificationManager({
       container: document.getElementById("notification-container"),
     });

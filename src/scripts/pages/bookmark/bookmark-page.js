@@ -14,9 +14,7 @@ class BookmarkPage {
         <div class="skip-link">
           <a href="#main-content" class="skip-link__button">Langsung ke konten</a>
         </div>
-        
         <h1 class="page-title">Cerita Tersimpan</h1>
-        
         <div id="bookmarks" class="bookmarks-container">
           ${createLoadingTemplate()}
         </div>
@@ -28,7 +26,6 @@ class BookmarkPage {
     this.#presenter = new BookmarkPresenter({
       view: this,
     });
-
     this.#presenter.init();
   }
 
@@ -46,7 +43,6 @@ class BookmarkPage {
     const bookmarksContainer = document.getElementById("bookmarks");
     bookmarksContainer.innerHTML = `
       <div class="empty-state">
-        <i data-feather="bookmark" class="empty-state__icon"></i>
         <p>Tidak ada cerita tersimpan</p>
         <a href="#/" class="btn btn-primary">Jelajahi Cerita</a>
       </div>
@@ -55,7 +51,6 @@ class BookmarkPage {
 
   showBookmarks(bookmarks) {
     const bookmarksContainer = document.getElementById("bookmarks");
-
     if (bookmarks.length === 0) {
       this.showEmptyBookmarks();
       return;
@@ -69,7 +64,6 @@ class BookmarkPage {
           </div>
         `;
       });
-
       transition.finished.then(() => {
         this._setupDeleteButtons();
       });
@@ -85,32 +79,15 @@ class BookmarkPage {
 
   _setupDeleteButtons() {
     const storyItems = document.querySelectorAll(".story-item");
-
     storyItems.forEach((item) => {
       const storyId = item
         .querySelector(".story-item__link")
         .getAttribute("href")
         .split("/")
         .pop();
-
-      // Add delete button to each story item
-      const deleteButton = document.createElement("button");
-      deleteButton.className = "btn btn-delete";
-      deleteButton.innerHTML = '<i data-feather="trash-2"></i>';
-      deleteButton.setAttribute("data-id", storyId);
-      item.appendChild(deleteButton);
-
-      // Initialize feather icons
       if (window.feather) {
         window.feather.replace();
       }
-
-      // Add event listener to delete button
-      deleteButton.addEventListener("click", (event) => {
-        event.preventDefault();
-        event.stopPropagation();
-        this.#presenter.removeBookmark(storyId);
-      });
     });
   }
 }

@@ -70,7 +70,6 @@ class StoryDetailPage {
       : "Cerita dihapus dari daftar simpanan";
     notification.classList.add("show");
 
-    // Hide notification after 3 seconds
     setTimeout(() => {
       notification.classList.remove("show");
     }, 3000);
@@ -83,16 +82,23 @@ class StoryDetailPage {
         ? "Batal Simpan"
         : "Simpan Cerita";
 
-      bookmarkButton.classList.toggle("bookmarked", isBookmarked);
+      if (isBookmarked) {
+        bookmarkButton.classList.add("bookmarked");
+      } else {
+        bookmarkButton.classList.remove("bookmarked");
+      }
     }
   }
 
-  showStoryDetail(story) {
+  showStoryDetail(story, isBookmarked) {
     const storyContainer = document.getElementById("story");
 
     if (document.startViewTransition) {
       const transition = document.startViewTransition(() => {
-        storyContainer.innerHTML = createStoryDetailTemplate(story);
+        storyContainer.innerHTML = this._createStoryDetailWithBookmarkState(
+          story,
+          isBookmarked
+        );
       });
 
       transition.finished.then(() => {
@@ -102,13 +108,41 @@ class StoryDetailPage {
         }
       });
     } else {
-      storyContainer.innerHTML = createStoryDetailTemplate(story);
+      storyContainer.innerHTML = this._createStoryDetailWithBookmarkState(
+        story,
+        isBookmarked
+      );
       this._setupBookmarkButton();
 
       if (story.lat && story.lon) {
         this.initMap(story);
       }
     }
+  }
+
+  _createStoryDetailWithBookmarkState(story, isBookmarked) {
+    return `
+      <article class="story-detail">
+        <h2 class="story-detail__title">${story.name}</h2>
+        <img 
+          src="${story.photoUrl}" 
+          alt="Foto untuk cerita ${story.description}" 
+          class="story-detail__image"
+        >
+        <div class="story-detail__content">
+          <p class="story-detail__date">${showFormattedDate(
+            story.createdAt
+          )}</p>
+          <p class="story-detail__description">${story.description}</p>
+        </div>
+        <div id="map" class="story-detail__map"></div>
+        <button id="bookmarkButton" class="btn btn-primary ${
+          isBookmarked ? "bookmarked" : ""
+        }">
+          ${isBookmarked ? "Batal Simpan" : "Simpan Cerita"}
+        </button>
+      </article>
+    `;
   }
 
   _setupBookmarkButton() {
@@ -141,6 +175,15 @@ class StoryDetailPage {
       )
       .openPopup();
   }
+}
+
+function showFormattedDate(date, locale = "id-ID", options = {}) {
+  return new Date(date).toLocaleDateString(locale, {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    ...options,
+  });
 }
 
 export default StoryDetailPage;

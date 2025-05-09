@@ -49,21 +49,24 @@ class StoryDetailPresenter {
     this.#view.showLoading();
 
     try {
-      const token = this.#auth.getToken();
-      const response = await this.#api.getStoryDetail(token, this.#storyId);
-
-      if (response.error) {
-        throw new Error(response.message);
-      }
-
-      this._state.story = response.story;
-
-      // Check if story is bookmarked
-      const bookmarked = await BookmarkDB.get(this._state.story.id);
+      const bookmarked = await BookmarkDB.get(this.#storyId);
       this._state.isBookmarked = !!bookmarked;
 
-      this.#view.showStoryDetail(this._state.story);
-      this.#view.updateBookmarkButton(this._state.isBookmarked);
+      let storyData;
+
+      if (bookmarked) {
+        storyData = bookmarked;
+      } else {
+        const token = this.#auth.getToken();
+        const response = await this.#api.getStoryDetail(token, this.#storyId);
+        if (response.error) {
+          throw new Error(response.message);
+        }
+        storyData = response.story;
+      }
+
+      this._state.story = storyData;
+      this.#view.showStoryDetail(this._state.story, this._state.isBookmarked);
 
       if (this._state.story.lat && this._state.story.lon) {
         this.#view.initMap(this._state.story);
@@ -80,10 +83,8 @@ class StoryDetailPresenter {
     const story = this._state.story;
 
     if (!story) return;
-
     try {
       const existing = await BookmarkDB.get(story.id);
-
       if (existing) {
         await BookmarkDB.delete(story.id);
         this._state.isBookmarked = false;

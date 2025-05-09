@@ -1,5 +1,11 @@
 const CACHE_NAME = "dicoding-story-cache-v1";
-const urlsToCache = ["/", "/index.html", "/favicon.png", "/offline.html"];
+const urlsToCache = [
+  "/",
+  "/index.html",
+  "/favicon.png",
+  "/offline.html",
+  "/images/logo.png",
+];
 
 self.addEventListener("install", (event) => {
   console.log("Service Worker: Installing");
@@ -83,7 +89,6 @@ self.addEventListener("fetch", (event) => {
   );
 });
 
-
 self.addEventListener("push", (event) => {
   console.log("Service Worker: Push received");
 
@@ -96,8 +101,8 @@ self.addEventListener("push", (event) => {
       title: "Dicoding Story",
       options: {
         body: "Ada cerita baru untuk Anda",
-        icon: "/icons/icon-192x192.png",
-        badge: "/icons/badge-72x72.png",
+        icon: "/images/logo.png",
+        badge: "/images/logo.png",
         vibrate: [100, 50, 100, 50, 100],
         data: {
           url: "/",
@@ -109,8 +114,8 @@ self.addEventListener("push", (event) => {
   const title = notificationData.title || "Dicoding Story";
   const options = notificationData.options || {
     body: "Ada cerita baru untuk Anda",
-    icon: "/icons/icon-192x192.png",
-    badge: "/icons/badge-72x72.png",
+    icon: "/images/logo.png",
+    badge: "/images/logo.png",
     vibrate: [100, 50, 100, 50, 100],
     data: {
       url: "/",

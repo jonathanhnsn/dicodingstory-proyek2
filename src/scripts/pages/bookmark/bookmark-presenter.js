@@ -53,12 +53,9 @@ class BookmarkPresenter {
   async removeBookmark(storyId) {
     try {
       await BookmarkDB.delete(storyId);
-
-      // Update state and UI
       this._state.bookmarks = this._state.bookmarks.filter(
         (bookmark) => bookmark.id !== storyId
       );
-
       this.#view.showBookmarks(this._state.bookmarks);
     } catch (error) {
       console.error("Error removing bookmark:", error);

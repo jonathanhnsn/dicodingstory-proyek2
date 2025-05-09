@@ -1,5 +1,6 @@
 import ApiService from "../../../scripts/data/api";
 import Auth from "../../utils/auth";
+import BookmarkDB from "../../data/indexeddb-utils";
 
 class HomePresenter {
   #view = null;
@@ -91,7 +92,7 @@ class HomePresenter {
   }
 
   async #showCachedStories() {
-    const cachedStories = await getAllStories();
+    const cachedStories = await BookmarkDB.getAll();
 
     if (!cachedStories.length) {
       this.#view.showError("Tidak ada data offline yang tersedia.");
