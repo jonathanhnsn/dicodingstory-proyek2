@@ -2,3 +2,5 @@ APP_URL=<url_aplikasi>
 MAP_SERVICE_API_KEY=<api_key>
 
 map menggunakan open street map
+
+link deploy: https://dicoding-story.netlify.app/

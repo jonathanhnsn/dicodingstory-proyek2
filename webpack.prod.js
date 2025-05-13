@@ -4,14 +4,13 @@ const { merge } = require("webpack-merge");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CopyPlugin = require("copy-webpack-plugin");
+const { InjectManifest } = require("workbox-webpack-plugin");
 
 module.exports = merge(common, {
   mode: "production",
   output: {
     filename: (pathData) => {
-      return pathData.chunk.name === "sw"
-        ? "service-worker.js"
-        : "[name].js";
+      return pathData.chunk.name === "sw" ? "service-worker.js" : "[name].js";
     },
   },
   module: {
@@ -46,6 +45,10 @@ module.exports = merge(common, {
           to: path.resolve(__dirname, "dist/offline.html"),
         },
       ],
+    }),
+    new InjectManifest({
+      swSrc: path.resolve(__dirname, "src/service-worker.js"),
+      swDest: "service-worker.js",
     }),
   ],
 });
